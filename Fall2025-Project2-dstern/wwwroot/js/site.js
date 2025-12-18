@@ -3,6 +3,10 @@
 
 // Write your JavaScript code.
 
+const api = "AIzaSyDOdaQNwhsrHKTxA1ZArC2AsCZeP_3mRVA";
+const cx = "45aaadabb52d048e0";
+
+
 $(function () {
 
     let backgrndIndex = 0;
