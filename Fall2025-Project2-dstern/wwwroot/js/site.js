@@ -53,48 +53,58 @@ $(function () {
                 }
             });
     });
-    async function runSearch() {
+
+
+
+    async function runSearch(append = false) {
         
 
         const query = $("#query").val().trim();
         if (!query) return;
 
+
+        if (!append || query !== lastQuery) {
+            lastQuery = query;
+            startIndex = 1;
+            $("#searchResults").empty();
+        }
+
         const url = `https://www.googleapis.com/customsearch/v1?key=${encodeURIComponent(api)}&cx=${encodeURIComponent(cx)}&q=${encodeURIComponent(query)}`;
 
         try {
             const response = await fetch(url);
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            const data = await response.json();
+            if (!response.ok) return;
 
+            const data = await response.json();
             const items = data.items || [];
             const $results = $("#searchResults");
-            $results.empty();
 
-            if (items.length === 0) {
-                $results.append("<p>No results found.</p>");
-            } else {
-                items.forEach(item => {
-                    const title = item.title || "(no title)";
-                    const link = item.link || "#";
-                    const snippet = item.snippet || "";
-                    const displayLink = item.displayLink || "";
+            // append results (don't clear here)
+            items.forEach(item => {
+                const title = item.title || "(no title)";
+                const link = item.link || "#";
+                const snippet = item.snippet || "";
+                const displayLink = item.displayLink || "";
 
-                    $results.append(`
-                  <div class="result">
-                    <a class="title" href="${link}" target="_blank" rel="noopener">${title}</a>
-                    <div class="link">${displayLink}</div>
-                    <div class="snippet">${snippet}</div>
-                  </div>
-                `);
-                });
-            }
+                $results.append(`
+              <div class="result">
+                <a class="title" href="${link}" target="_blank" rel="noopener">${title}</a>
+                <div class="link">${displayLink}</div>
+                <div class="snippet">${snippet}</div>
+              </div>
+            `);
+            });
 
             $results.css("visibility", "visible");
-        } catch (err) {
-            console.error(err);
-            $("#searchResults")
-                .css("visibility", "visible")
-                .html("<p>Search failed. Check API key, cx, and that Custom Search API is enabled.</p>");
+
+            
+            if (items.length === 10) $("#bttnMore").show();
+            else $("#bttnMore").hide();
+
+            
+            startIndex += 10;
+        } catch {
+            $("#bttnMore").hide();
         }
     }
 
@@ -122,16 +132,14 @@ $(function () {
     }
 
     $("#bttnLucky").on("click", runLucky);
-    $("#bttnLucky").on("click", () => console.log("Lucky clicked"));
-
-
-
+   
     $("#bttnSearch").on("click", runSearch);
+    $("#bttnMore").on("click", () => runSearch(true));
 
     $("#query").on("keydown", function (e) {
         if (e.key === "Enter") {
             e.preventDefault();
-            runSearch();
+            runSearch(false);
         }
     });
 
