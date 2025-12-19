@@ -1,26 +1,169 @@
+:root {
+    --card-bg: rgba(255,255,255,0.88);
+    --text: #111;
+    --muted: #4b5563;
+    --border: rgba(0,0,0,0.10);
+    --shadow: 0 18px 45px rgba(0,0,0,0.20);
+    --radius: 16px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
-    background-image: url("https://wallpapers.com/images/hd/simple-desktop-keyboard-keys-fzpfef8zvxj6jnt7.jpg");
+    min-height: 100vh;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    color: var(--text);
     background-size: cover;
     background-position: center;
-    color: #111;
+    background-attachment: fixed;
 }
+
+    body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.35);
+        pointer-events: none;
+    }
 
 header {
+    position: relative;
     text-align: center;
-    padding: 2rem;
+    padding: 48px 16px 18px;
 }
+
+#title {
+    margin: 0;
+    font-size: clamp(2rem, 10vw, 3rem);
+    letter-spacing: 0.5px;
+    color: white;
+    text-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    cursor: pointer;
+    user-select: none;
+}
+
+    #title:hover {
+        transform: translateY(-1px);
+    }
 
 main {
-    background-color: rgba(255, 255, 255, 0.85);
-    max-width: 600px;
-    margin: 2rem auto;
-    padding: 1.5rem;
-    border-radius: 8px;
+    position: relative;
+    width: min(920px, 92vw);
+    margin: 0 auto 64px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 22px;
+    backdrop-filter: blur(6px);
 }
 
-#searchResults,
+.searchRow {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+#query {
+    flex: 1 1 420px;
+    height: 44px;
+    padding: 0 14px;
+    font-size: 1rem;
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,0.18);
+    outline: none;
+    background: rgba(255,255,255,0.9);
+}
+
+    #query:focus {
+        border-color: rgba(0,0,0,0.35);
+        box-shadow: 0 0 0 3px rgba(59,130,246,0.18);
+    }
+
+.bttnRow {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+button, input[type="button"] {
+    height: 40px;
+    padding: 0 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,0.18);
+    background: white;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+    button:hover, input[type="button"]:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 18px rgba(0,0,0,0.10);
+    }
+
+    button:active, input[type="button"]:active {
+        transform: translateY(0px);
+    }
+
+#searchResults {
+    visibility: hidden;
+    margin-top: 18px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(0,0,0,0.08);
+}
+
+.result {
+    padding: 14px 8px;
+    border-bottom: 1px solid rgba(0,0,0,0.07);
+}
+
+    .result:last-child {
+        border-bottom: 0;
+    }
+
+.title {
+    display: inline-block;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #1a0dab;
+    text-decoration: none;
+}
+
+    .title:hover {
+        text-decoration: underline;
+    }
+
+.link {
+    margin-top: 3px;
+    color: #0b7a28;
+    font-size: 0.92rem;
+}
+
+.snippet {
+    margin-top: 6px;
+    color: var(--muted);
+    line-height: 1.35;
+}
+
 #time {
     visibility: hidden;
+}
+#bttnMore {
+    display: none;
+    margin-top: 12px;
+}
+
+
+
+.ui-dialog {
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.ui-dialog-titlebar {
+    font-weight: 800;
 }
