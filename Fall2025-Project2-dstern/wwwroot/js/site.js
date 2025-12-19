@@ -51,7 +51,7 @@ $(function () {
             });
     });
     async function runSearch() {
-        console.log("runSearch fired");
+        
 
         const query = $("#query").val().trim();
         if (!query) return;
@@ -94,6 +94,34 @@ $(function () {
                 .html("<p>Search failed. Check API key, cx, and that Custom Search API is enabled.</p>");
         }
     }
+
+    async function runLucky() {
+        const query = $("#query").val().trim();
+        if (!query) return;
+
+        const url = `https://www.googleapis.com/customsearch/v1?key=${encodeURIComponent(api)}&cx=${encodeURIComponent(cx)}&q=${encodeURIComponent(query)}`;
+
+        try {
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const data = await response.json();
+
+            if (data.items && data.items.length > 0) {
+                window.open(data.items[0].link, "_blank", "noopener");
+
+            } else {
+                alert("No results found.");
+            }
+        } catch (err) {
+            console.error(err);
+            alert("Lucky search failed.");
+        }
+    }
+
+    $("#bttnLucky").on("click", runLucky);
+    $("#bttnLucky").on("click", () => console.log("Lucky clicked"));
+
+
 
     $("#bttnSearch").on("click", runSearch);
 
